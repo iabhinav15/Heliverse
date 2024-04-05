@@ -1,25 +1,15 @@
 import { Router } from "express";
-import { loginUser, logoutUser, registerUser } from "../controllers/user.controller.js";
-import { verifyJWT } from "../middlewares/auth.middleware.js";
+import { deleteUser, getAllUsers, getUser, loginUser, registerUser, updateUser } from "../controllers/user.controller.js";
 const router = Router()
 
 
-router.route("/register").post(
-  // upload.fields([
-  //     {
-  //         name: "avatar",
-  //         maxCount: 1
-  //     }, 
-  //     {
-  //         name: "coverImage",
-  //         maxCount: 1
-  //     }
-  // ]),
-  registerUser
-  )
-
+router.route("/register").post(registerUser)
 router.route("/login").post(loginUser)
-router.route("/logout").post(verifyJWT,  logoutUser)
+router.route("/get-allusers").get(getAllUsers)
+router.route("/get-user/:id").get(getUser)
+router.route("/update-user/:id").put(updateUser)
+router.route("/delete-user/:id").delete(deleteUser)
+
 
 
 export default router

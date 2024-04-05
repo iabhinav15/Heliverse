@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 5px solid;
+  border-color: rgb(254 202 202);
+  border-right-color: rgb(239 68 68);
+  animation: spinner 1s infinite linear;
+}
+
+@keyframes spinner{
+  to {
+     transform: rotate(1turn);
+  }
+}
+
 /* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

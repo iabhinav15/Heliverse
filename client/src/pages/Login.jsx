@@ -2,20 +2,16 @@
 import React, { useState} from 'react'
 import { useForm } from 'react-hook-form'
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import Link from 'next/link';
-import Image from 'next/image';
-import TextInput from '../components/TestInput/TextInput';
-import Loading from '../components/Loading/Loading';
-import CustomButton from '../components/CustomBotton/CustomButton';
-import { useRouter } from 'next/navigation';
 import { GrMultiple } from 'react-icons/gr';
+import { CustomButton, Loading, TextInput } from '../components';
+import { Link, useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm({mode:'onChange'});
   const [errMsg, setErrMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const router = useRouter();
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
 
@@ -32,7 +28,7 @@ const LoginPage = () => {
       const resData = await res.json();
 
       if(resData?.success === true){
-        router.push("/");
+        navigate("/");
       } else{
         setErrMsg("Something went wrong!");
       }
@@ -96,13 +92,13 @@ const LoginPage = () => {
           }
           </form>
           <p className='text-ascent-2 pt-6 text-sm text-center'>
-            Don&lsquo;t have an account? <Link href='/register' className='text-red-500 font-semibold ml-2 cursor-pointer'>Sign up</Link>
+            Don&lsquo;t have an account? <Link to='/register' className='text-red-500 font-semibold ml-2 cursor-pointer'>Sign up</Link>
           </p>
         </div>
         {/* RIGHT */} 
         <div className='hidden w-1/2 h-full md:flex flex-col items-center justify-center bg-[#f2f3f8] '>
           <div className='relative w-full flex items-center justify-center'>
-            <Image src="/registerImg.png" height={450} width={450} alt='Bg Img' />
+            <img src="/registerImg.png" height={450} width={450} alt='Bg Img' />
           </div>
           <div className='md:px-8 mt-2 text-center'>
             <p className='text-[#33333b] font-bold text-2xl'>
@@ -117,4 +113,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default Login
