@@ -4,7 +4,7 @@ This web application allows users to create teams by selecting users from a list
 
 ## Live Link
 
-Visit the application [here](#).
+Visit the application [here](https://teamcreatorabhinav.netlify.app).
 
 ## Table of Contents
 
