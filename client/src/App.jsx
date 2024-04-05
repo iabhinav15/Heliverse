@@ -1,6 +1,5 @@
 import React from 'react';
-import {Outlet,  Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Route, Routes } from 'react-router-dom';
 import {Home, NewUser, NotFound, Team, User} from './pages';
 
 
