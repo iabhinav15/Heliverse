@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// create a schema
+// Team schema
 const teamSchema = new mongoose.Schema({
 
   teamName: {
@@ -14,5 +14,5 @@ const teamSchema = new mongoose.Schema({
   
 });
 
-// create a model
+// Model
 export const Team = mongoose.model('Team', teamSchema);

@@ -1,44 +1,42 @@
 import { Team } from "../models/team.model.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 
-const createTeam = async (req, res) => {
+// Create a new team
+const createTeam = asyncHandler(async (req, res) => {
 
-  try {
     const team = new Team(req.body);
+
     const newTeam = await team.save();
-    res.status(201).json({
-      success: true,
-      message: "Team created successfully",
-      newTeam,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-}
 
-const getAllTeam = async (req, res) => {
-  try {
+    if(!newTeam) throw new ApiError(500, "Something went wrong while creating the team");
+
+    return res.status(201).json(new ApiResponse(200, newTeam, "Team created successfully"));
+  
+})
+
+
+//  Get all teams
+const getAllTeam = asyncHandler(async (req, res) => {
+
     const allteams = await Team.find().populate("teamMembers");
-    res.status(200).json({
-      success: true,
-      allteams,
-    });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-}
 
-const getTeam = async (req, res) => {
-  try {
+    return res.status(200).json(new ApiResponse(200, allteams, "All teams retrieved successfully"));
+ 
+})
+
+
+// Get a team by id
+const getTeam = asyncHandler(async (req, res) => {
+
     const team = await Team.findById(req.params.id).populate("teamMembers");
-    res.status(200).json({
-      success: true,
-      team,
-    });
-  } catch (error) {
-    res.status(404).json({ message: error.message });
-  }
-}
+
+    if(!team) throw new ApiError(404, "Team not found");
+    
+    return res.status(200).json(new ApiResponse(200, team, "Team retrieved successfully"));
+ 
+})
 
 
 

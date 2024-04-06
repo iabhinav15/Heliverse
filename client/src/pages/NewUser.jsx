@@ -28,7 +28,7 @@ const NewUser = () => {
 
       data.domain = selectedDomain;
 
-      const url = `${import.meta.env.VITE_API_URL}/api/users/register`;
+      const url = `${import.meta.env.VITE_API_URL}/api/users/create-user`;
       const res = await fetch(url, {
         method: 'POST',
         headers: {

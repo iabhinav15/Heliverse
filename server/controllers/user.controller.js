@@ -4,7 +4,8 @@ import { User} from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
  
 
-const registerUser = asyncHandler( async (req, res) => {
+// Create a new user
+const createUser = asyncHandler( async (req, res) => {
 
     const {first_name, last_name,  email, gender, avatar, domain, available } = req.body;
     
@@ -35,64 +36,19 @@ const registerUser = asyncHandler( async (req, res) => {
     )
 
     if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user")
+        throw new ApiError(500, "Something went wrong while creating the user")
     }
 
     return res.status(201).json(
-        new ApiResponse(200, createdUser, "User registered Successfully")
+        new ApiResponse(200, createdUser, "User created Successfully")
     )
 
 } )
 
-const loginUser = asyncHandler(async (req, res) =>{
 
-    const {email, username, password} = req.body
-    console.log(email);
-
-    if (!username && !email) {
-        throw new ApiError(400, "username or email is required")
-    }
-
-    const user = await User.findOne({
-        $or: [{username}, {email}]
-    })
-
-    if (!user) {
-        throw new ApiError(404, "User does not exist")
-    }
-
-   const isPasswordValid = await user.isPasswordCorrect(password)
-
-   if (!isPasswordValid) {
-    throw new ApiError(401, "Invalid user credentials")
-    }
-
-    const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
-
-    const options = {
-        httpOnly: true,
-        secure: true
-    }
-
-    return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
-    .json(
-        new ApiResponse(
-            200, 
-            {
-                user: loggedInUser, accessToken, refreshToken
-            },
-            "User logged In Successfully"
-        )
-    )
-
-})
-
-
+// Get all users
 const getAllUsers = asyncHandler(async(req, res) => {
-    try {
+
         let query = {};
         
         // Check if there is a query for search
@@ -148,9 +104,7 @@ const getAllUsers = asyncHandler(async(req, res) => {
             page,
             totalPages
         });
-      } catch (err) {
-        res.status(500).json({ message: err.message });
-      }
+        
 })
 
 
@@ -167,8 +121,7 @@ const getUser = asyncHandler(async(req, res) => {
 
 })
 
-
-// function to update user details
+// Update user details
 const updateUser = asyncHandler(async(req, res) => {
 
     const {first_name, last_name,  email, gender, avatar, domain, available } = req.body;
@@ -190,7 +143,8 @@ const updateUser = asyncHandler(async(req, res) => {
         available
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updateUser, {new: true}).select(
+    // Find the user by id and update the user
+    const updatedUser = await User.findByIdAndUpdate(userId, user, {new: true}).select(
         "-password"
     )
 
@@ -198,13 +152,14 @@ const updateUser = asyncHandler(async(req, res) => {
         throw new ApiError(500, "Something went wrong while updating the user")
     }
 
-    return res.status(200).json({
-        success: true,
-        message: "User updated successfully.",
-        updatedUser,
-    })
+    return res.status(200).json(
+        new ApiResponse(200, updatedUser, "User updated successfully")
+    )
+
 })
 
+
+// Delete a user
 const deleteUser = asyncHandler(async(req, res) => {
 
     // It returns the user which was deleted
@@ -219,8 +174,7 @@ const deleteUser = asyncHandler(async(req, res) => {
 })
 
 export {
-    registerUser,
-    loginUser,
+    createUser,
     getUser,
     updateUser,
     getAllUsers,
