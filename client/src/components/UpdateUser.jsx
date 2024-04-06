@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import { useForm } from 'react-hook-form'
 import { GrMultiple } from 'react-icons/gr';
 import { CustomButton, Loading, TextInput } from '../components';
-import { useNavigate } from "react-router-dom";
 import { handleFileUpload } from '../utils';
 
 
@@ -14,11 +13,9 @@ const UpdateUser = ({ user, onClose }) => {
   const [picture, setPicture] = useState(null);
   const [selectedDomain, setSelectedDomain] = useState(user?.domain);
 
-  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     setIsSubmitting(true);
-    console.log(data)
 
     try {
       const avatarUrl = picture && (await handleFileUpload(picture))
@@ -28,7 +25,7 @@ const UpdateUser = ({ user, onClose }) => {
 
       const url = `${import.meta.env.VITE_API_URL}/api/users/update-user/${user._id}`;
       const response = await fetch(url, {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
@@ -37,7 +34,8 @@ const UpdateUser = ({ user, onClose }) => {
       const resData = await response.json();
 
       if(resData?.success === true){
-        navigate("/");
+        onClose();
+        alert("User updated successfully");
       }
       else{
         setErrMsg("Something went wrong!");
@@ -62,7 +60,7 @@ const UpdateUser = ({ user, onClose }) => {
           </div>
           <p className='text-ascent-1 text-base font-semibold'>Fill to update user</p>
        
-          <form className='flex' onSubmit={handleSubmit(onSubmit)}>
+          <form className='flex justify-around' onSubmit={handleSubmit(onSubmit)}>
             <div className='w-[40%] py-4 flex flex-col items-center gap-2'>
               <TextInput
                 name='first_name' placeholder='First name' type='text'
@@ -145,17 +143,19 @@ const UpdateUser = ({ user, onClose }) => {
               {
                 isSubmitting ? <Loading /> : <CustomButton type='submit' containerStyles={`inline-flex justify-center rounded-md bg-green-500 px-16 py-2.5 my-2 tracking-wide text-md font-medium text-white outline-none `} title='Update User'/>
               }
-          
+              {/* Button to  close the modal window */}
+              <div>
+                <CustomButton onClick={onClose} containerStyles={`inline-flex justify-center rounded-md bg-red-500 px-16 py-2.5 my-2 tracking-wide text-md font-medium text-white outline-none `} title='Close'/>
+              </div>
             </div>
+            {/* Image upload */}
             <div className='flex flex-col items-center justify-center gap-2'>
-              <img src={picture ? URL.createObjectURL(picture) : user?.avatar} alt="" className='h-[40%] w-[40%] rounded-full object-cover'/>
+              <img src={picture ? URL.createObjectURL(picture) : user?.avatar} alt="" className='sm:h-80 sm:w-80 h-14 w-14 rounded-full object-cover'/>
               <label htmlFor='profilePhoto' className='text-base font-semibold'>Avatar</label>
               <label htmlFor="imgUpload" className='flex items-center gap-1 text-base text-ascent-2  hover:text-ascent-1 cursor-pointer'>
-              <input type="file" required id="imgUpload" onChange={(e)=>setPicture(e.target.files[0])} accept='.jpg, .png. .jpeg'/></label>
+              <input type="file" id="imgUpload" onChange={(e)=>setPicture(e.target.files[0])} accept='.jpg, .png. .jpeg'/></label>
             </div>
           </form>
-          {/* create a close button to  close the modal window */}
-          <button onClick={onClose} className='flex items-center justify-center p-2 rounded-md bg-red-500 w-[28%] text-white'>Close</button>
         </div>
     </div>
   )

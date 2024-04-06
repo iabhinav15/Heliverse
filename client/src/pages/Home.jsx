@@ -191,7 +191,7 @@ const Home = () => {
         createTeam && <CreateTeamModal teamMembersDetails={teamMembersDetails} onClose={() => setCreateTeam(false)} onConfirm={onConfirm} />
       }
       {
-        updateUserStatus && <UpdateUser user={updateUserDetail} onClose={() => setupdateUserStatus(false)} />
+        updateUserStatus && <UpdateUser user={updateUserDetail}   onClose={() => setupdateUserStatus(false)} />
       }
       <div className='flex justify-between w-screen '>
         <div>

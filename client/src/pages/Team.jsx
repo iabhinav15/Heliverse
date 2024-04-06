@@ -23,7 +23,7 @@ const Team = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 p-4 rounded-md shadow-md">
+    <div className="bg-gray-100 p-4 min-h-[100vh] rounded-md shadow-md">
       <h1 className="text-2xl text-center font-bold mb-4">{Team?.teamName}</h1>
       <h3 className="text-2xl font-bold mb-4">Team Members</h3>
       {

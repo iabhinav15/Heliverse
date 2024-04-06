@@ -141,7 +141,7 @@ const NewUser = () => {
               }
             </div>
             <div className='w-full flex flex-col items-center justify-center gap-2'>
-              <img src={picture ? URL.createObjectURL(picture) : NoProfile} alt="" className='h-[40%] w-[40%] rounded-full object-cover'/>
+              <img src={picture ? URL.createObjectURL(picture) : NoProfile} alt="" className='h-14 w-14 md:h-96 md:w-96 rounded-full object-cover'/>
               <label htmlFor='profilePhoto' className='text-base font-semibold'>Avatar</label>
               <label htmlFor="imgUpload" className='flex items-center gap-1 text-base text-ascent-2  hover:text-ascent-1 cursor-pointer'>
               <input type="file" required id="imgUpload" onChange={(e)=>setPicture(e.target.files[0])} accept='.jpg, .png. .jpeg'/></label>

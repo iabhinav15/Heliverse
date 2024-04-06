@@ -108,6 +108,7 @@ const getAllUsers = asyncHandler(async(req, res) => {
 })
 
 
+// Get a user by id
 const getUser = asyncHandler(async(req, res) => {
     // fetch a user by id from param
     const user = await User.findById(req.params.id).select("-password");
@@ -120,6 +121,7 @@ const getUser = asyncHandler(async(req, res) => {
     )
 
 })
+
 
 // Update user details
 const updateUser = asyncHandler(async(req, res) => {
