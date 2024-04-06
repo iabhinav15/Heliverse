@@ -11,10 +11,8 @@ const teamSlice = createSlice({
 
         const teamsToAdd = Array.isArray(action.payload) ? action.payload : [action.payload];
         teamsToAdd.forEach((team) => {
-          if(state.teams.find((t) => t._id === team._id)) return;
           state.teams.push(team);
         });
-        localStorage.setItem("teams", JSON.stringify(state.teams));
         
     }
   },

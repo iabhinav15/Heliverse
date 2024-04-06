@@ -13,10 +13,8 @@ const Team = () => {
         const response = await fetch(url, {
           method: 'GET',
         });
-        // console.log(response)
         const data = await response.json();
-        // console.log(data)
-        setTeam(data.team);
+        setTeam(data.data);
       } catch (error) {
         console.log(error.message);
       }

@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react'
 import { AllTeams, Filters, Header, Loading, Pagination, UserCard } from '../components';
-import {useDispatch} from 'react-redux'
 import CreateTeamModal from '../components/CreateTeamModal';
-import { addTeam } from '../redux/teamSlice';
 import UpdateUser from '../components/UpdateUser';
 
 const Home = () => {
 
-  const [users, setUsers] = useState(null);
+  const [users, setUsers] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [genderFilter, setGenderFilter] = useState({});
@@ -19,7 +17,7 @@ const Home = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [updateUserStatus, setupdateUserStatus] = useState(false);
   const [updateUserDetail, setUpdateUserDetail] = useState(false);
-  
+  const [newTeamData, setNewTeamData] = useState({});
 
   const searchData = (query) => {
     setSearchQuery(query.trim());
@@ -88,7 +86,8 @@ const Home = () => {
 
   }, [searchQuery, genderFilter, availabilityFilter, domainFilter, currentPage]);
 
-  
+
+  // Select or deselect team members
   const toggleTeamSelection = (user) => {
 
     // user must be available
@@ -113,11 +112,13 @@ const Home = () => {
 
   }
 
+  // On click create team opens a modal to confirm new team creation
   const createNewTeam = () => {
     if(teamMembersDetails.length === 0) return alert("Please select atleast one team member");
     setCreateTeam(true);
   }
-  const dispatch = useDispatch();
+
+  // Confirm to create new team
   const onConfirm = async (teamName) => {
 
     if(teamName.trim() === "") return alert("Please enter team name");
@@ -139,7 +140,7 @@ const Home = () => {
         body: JSON.stringify(teamData)
       });
       const data = await response.json();
-      dispatch(addTeam(data.newTeam));
+      setNewTeamData(data.data);
       if(data.success) alert("Team created successfully");
       else alert("Something went wrong, please try again");
     } catch (error) {
@@ -198,17 +199,20 @@ const Home = () => {
         </div>
         <div className='flex flex-col justify-between w-3/4"'>
         <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
-          {isSubmitting ? <Loading /> : 
-          users?.map((user) => (
-            <div key={user._id} className={`my-2 flex border ${teamMembersDetails?.some(member => member._id === user._id) ? "border-2 border-red-500" : ""}`}>
-              <UserCard user={user} updateUser={updateUser} deleteUser={deleteUser} teamMembersDetails={teamMembersDetails} toggleTeamSelection={toggleTeamSelection} />
-            </div>
-          ))}
+          {
+            isSubmitting ? <Loading /> : 
+            (users.length === 0 ? (<div>No users found</div>) : 
+            (users?.map(user => (
+              <div key={user._id} className={`my-2 flex border ${teamMembersDetails?.some(member => member._id === user._id) ? "border-2 border-red-500" : ""}`}>
+                <UserCard user={user} updateUser={updateUser} deleteUser={deleteUser} teamMembersDetails={teamMembersDetails} toggleTeamSelection={toggleTeamSelection} />
+              </div>
+            ))))
+          }
         </div>
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
         </div>
         <div>
-          <AllTeams />
+          <AllTeams newTeamData={newTeamData} />
         </div>
       </div>
         

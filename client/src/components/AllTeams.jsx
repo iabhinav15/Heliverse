@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
 import { GrMultiple } from "react-icons/gr"
-import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux'
-import { addTeam } from "../redux/teamSlice";
+import TeamCard from "./TeamCard";
 
 
-const AllTeams = () => {
-  const teams = useSelector((state) => state.teams);
-  // const [teams, setTeams] = useState(null);
-  const dispatch = useDispatch()
+const AllTeams = ({ newTeamData }) => {
+  
+  const [teams, setTeams] = useState([]);
 
   useEffect(() => {
     const fetchTeams = async () => {
@@ -18,15 +15,13 @@ const AllTeams = () => {
           method: 'GET',
         });
         const data = await response.json()
-       
-        dispatch(addTeam(data.allteams))
-        
+        setTeams(data.data)
       } catch (error) {
         console.log(error.message);
       }
     }
     fetchTeams();
-  }, []);
+  }, [newTeamData]);
 
   return (
     <>
@@ -38,11 +33,7 @@ const AllTeams = () => {
         <div className="">
         {
           teams?.map((team) => (
-            <div key={team._id} className='flex w-full justify-between         items-center gap-4 rounded-md px-3 py-2 my-4 shadow-md bg-white hover:bg-gray-100 transition-colors'>
-              <div className='text-sm font-medium'>{team.teamName}</div>
-              <p className='text-sm font-medium'>{team.teamMembers?.length} members</p>
-              <Link to={`${import.meta.env.VITE_APP_PUBLIC_URL}/team/${team._id}`} className='text-sm font-medium text-black bg-red-500 px-3 py-2 rounded-lg'>View</Link>
-            </div>
+            <TeamCard key={team._id} team={team} />
           ))
         }
         </div>
