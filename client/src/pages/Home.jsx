@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { AllTeams, Filters, Header, Loading, Pagination, UserCard } from '../components';
 import CreateTeamModal from '../components/CreateTeamModal';
 import UpdateUser from '../components/UpdateUser';
-
+import { useSelector, useDispatch } from 'react-redux'
+import { addTeam } from '../redux/teamSlice';
 const Home = () => {
 
   const [users, setUsers] = useState([]);
@@ -117,7 +118,7 @@ const Home = () => {
     if(teamMembersDetails.length === 0) return alert("Please select atleast one team member");
     setCreateTeam(true);
   }
-
+  const dispatch = useDispatch()
   // Confirm to create new team
   const onConfirm = async (teamName) => {
 
@@ -140,7 +141,8 @@ const Home = () => {
         body: JSON.stringify(teamData)
       });
       const data = await response.json();
-      setNewTeamData(data.data);
+      setNewTeamData(data.data); //passing new team data to allteams component to update the list of teams in useeffect
+      dispatch(addTeam(data.data))
       if(data.success) alert("Team created successfully");
       else alert("Something went wrong, please try again");
     } catch (error) {
@@ -151,9 +153,9 @@ const Home = () => {
     setTeamMembersDetails([]);
   }
 
-  const onPageChange = (page) => {
-    setCurrentPage(page);
-  };
+  // const onPageChange = (page) => {
+  //   setCurrentPage(page);
+  // };
 
   const updateUser = async (userId) => {
     console.log(userId);
@@ -185,31 +187,31 @@ const Home = () => {
   }
 
   return (
-    <div className="">
-      <Header searchData={searchData} createNewTeam={createNewTeam} />
+    <div>
+      <Header searchData={searchData} createNewTeam={createNewTeam} filterData={filterData} />
       {
         createTeam && <CreateTeamModal teamMembersDetails={teamMembersDetails} onClose={() => setCreateTeam(false)} onConfirm={onConfirm} />
       }
       {
         updateUserStatus && <UpdateUser user={updateUserDetail}   onClose={() => setupdateUserStatus(false)} />
       }
-      <div className='flex justify-between w-screen '>
+      <div className='flex justify-between'>
         <div>
           <Filters filterData={filterData} />
         </div>
-        <div className='flex flex-col justify-between w-3/4"'>
+        <div className='flex flex-col justify-between p-4'>
         <div className="flex flex-wrap justify-center items-center gap-2 mt-6">
           {
             isSubmitting ? <Loading /> : 
             (users.length === 0 ? (<div>No users found</div>) : 
             (users?.map(user => (
-              <div key={user._id} className={`my-2 flex border ${teamMembersDetails?.some(member => member._id === user._id) ? "border-2 border-red-500" : ""}`}>
+              <div key={user._id} className={`flex-wrap my-2 flex border ${teamMembersDetails?.some(member => member._id === user._id) ? "border-2 border-red-500" : ""}`}>
                 <UserCard user={user} updateUser={updateUser} deleteUser={deleteUser} teamMembersDetails={teamMembersDetails} toggleTeamSelection={toggleTeamSelection} />
               </div>
             ))))
           }
         </div>
-          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+          <Pagination currentPage={currentPage} totalPages={totalPages} setCurrentPage={setCurrentPage} />
         </div>
         <div>
           <AllTeams newTeamData={newTeamData} />

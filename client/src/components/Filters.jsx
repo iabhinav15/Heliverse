@@ -14,7 +14,7 @@ const Filters = ({ filterData }) => {
   }
 
   return (
-    <div className='w-48 h-[calc(100vh-70px)] bg-red-300 sticky top-[70px] left-0'>
+    <div className='hidden md:block w-48 h-[calc(100vh-70px)] bg-red-300 sticky top-[70px] left-0'>
       <h1 className='text-center text-xl font-semibold p-2'>Apply Filters</h1>
       <div>
           <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col items-center'>

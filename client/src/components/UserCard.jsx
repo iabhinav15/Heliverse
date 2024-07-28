@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const UserCard = ({ user, toggleTeamSelection, updateUser, deleteUser, teamMembersDetails }) => {
 
   return (
-    <div className='p-10 flex flex-col justify-center items-center'>
+    <div className='p-2 min-w-[250px] md:p-4 flex flex-col justify-center items-center'>
       <div className="w-24 h-24 rounded-full overflow-hidden">
         <img src={user.avatar} alt="avatar" className='w-full h-full  object-cover' />
       </div>

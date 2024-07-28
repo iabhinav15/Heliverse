@@ -1,27 +1,36 @@
 import { useEffect, useState } from "react";
 import { GrMultiple } from "react-icons/gr"
 import TeamCard from "./TeamCard";
-
+import React from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { allteams } from "../redux/teamSlice";
 
 const AllTeams = ({ newTeamData }) => {
   
-  const [teams, setTeams] = useState([]);
+  const teams = useSelector((state) => state.teams);
+  const dispatch = useDispatch();
+  
+  // const [teams, setTeams] = useState([]);
+  // useEffect(() => {
+  //   const fetchTeams = async () => {
+  //     try {
+  //       const url = `${import.meta.env.VITE_API_URL}/api/teams/get-allteam`
+  //       const response = await fetch(url, {
+  //         method: 'GET',
+  //       });
+  //       const data = await response.json()
+  //       // setTeams(data.data)
+  //       dispatch(allteams())
+  //     } catch (error) {
+  //       console.log(error.message);
+  //     }
+  //   }
+  //   fetchTeams();
+  // }, [newTeamData]); //can pass in newTeamData 
 
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const url = `${import.meta.env.VITE_API_URL}/api/teams/get-allteam`
-        const response = await fetch(url, {
-          method: 'GET',
-        });
-        const data = await response.json()
-        setTeams(data.data)
-      } catch (error) {
-        console.log(error.message);
-      }
-    }
-    fetchTeams();
-  }, [newTeamData]);
+    dispatch(allteams())
+  }, [])
 
   return (
     <>
