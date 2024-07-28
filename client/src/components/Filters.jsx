@@ -1,5 +1,3 @@
-// merge conflicts abhinav
-// merge conflicts amit
 import React from 'react'
 import TextInput from './TextInput'
 import { useForm } from 'react-hook-form';
